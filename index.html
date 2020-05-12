@@ -1,43 +1,68 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>CodePen - Responsive Audio Player</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-<link rel='stylesheet' href='https://cdn.plyr.io/3.5.6/plyr.css'><link rel="stylesheet" href="./style.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+<html lang="en">
 
-</head>
-<body>
-<!-- partial:index.partial.html -->
-<div class="container">
-    <div class="column add-bottom">
-        <div id="mainwrap">
-            <div id="nowPlay">
-                <span id="npAction">Paused...</span><span id="npTitle"></span>
-            </div>
-            <div id="audiowrap">
-                <div id="audio0">
-                    <audio id="audio1" preload controls>Your browser does not support HTML5 Audio! 😢</audio>
-                </div>
-                <div id="tracks">
-                    <a id="btnPrev">&vltri;</a><a id="btnNext">&vrtri;</a>
-                </div>
-            </div>
-            <div id="plwrap">
-                <ul id="plList"></ul>
-            </div>
-        </div>
-    </div>
-    <div class="column add-bottom center">
-        <p>Music by <a href="http://www.mythium.net/">Mythium</a></p>
-        <p>Download: <a href="https://archive.org/download/mythium/mythium_vbr_mp3.zip">zip</a> / <a href="https://archive.org/download/mythium/mythium_archive.torrent">torrent</a></p>
-    </div>
-</div>
-<!-- partial -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/html5media/1.1.8/html5media.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/plyr/3.5.6/plyr.min.js'></script><script  src="./script.js"></script>
+	<head>
+		<meta charset="UTF-8">
+		<title>伴讀小書僮</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+		<link rel='stylesheet' href='https://cdn.plyr.io/3.5.6/plyr.css'>
+		<link rel="stylesheet" href="./style.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
 
-</body>
+	</head>
+
+	<body>
+
+	<div class="container">
+		<div class="column add-bottom">
+			<div id="mainwrap">
+				<div id="nowPlay">
+					<span id="npAction">Paused...</span><span id="npTitle"></span>
+				</div>
+				<div id="audiowrap">
+					<div>
+						<audio id="player" preload controls>Your browser does not support HTML5 Audio! 😢</audio>
+					</div>
+					<div id="tracks">
+						<a id="btnPrev">&vltri;</a><a id="btnNext">&vrtri;</a>
+					</div>
+				</div>
+				<div id="plwrap">
+					<ul id="plList">
+						<li>
+							<div class="plItem">
+								<span class="plNum">01.</span>
+								<span class="plTitle">Intro</span>
+								<span class="plLength">3:04</span>
+							</div>
+						</li>
+
+						<li>
+							<div class="plItem">
+								<span class="plNum">02.</span>
+								<span class="plTitle">Intro</span>
+								<span class="plLength">3:04</span>
+							</div>
+						</li>
+
+						<li>
+							<div class="plItem">
+								<span class="plNum">03.</span>
+								<span class="plTitle">Intro</span>
+								<span class="plLength">3:04</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/html5media/1.1.8/html5media.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/plyr/3.5.6/plyr.min.js'></script>
+	<script src="./script.js"></script>
+
+	</body>
 </html>
