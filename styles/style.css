@@ -105,6 +105,15 @@ audio {
 	background-color: rgba(0,0,0,.1);
 }
 
+.plTopic {
+	font-size: .7rem;
+	background-color: lightsalmon;
+	color: black;
+	padding: 2px 5px;
+	border-radius: 2px;
+	margin-left: 50px;
+}
+
 .plItem {
 	position: relative;
 }
@@ -116,7 +125,7 @@ audio {
 	right: 65px;
 	text-overflow: ellipsis;
 	top: 0;
-	white-space: nowrap;
+	white-space: nowrap;	
 }
 
 .plNum {
@@ -214,12 +223,12 @@ a.plyr__controls__item.plyr__control:hover,
 
 .album-link {
 	text-decoration: none;
-	background-color: rgba(207, 0, 104, 0.8);
+	background: linear-gradient(to right, salmon, lightsalmon);
 	border: none;
-	border-radius: 10px;
-	padding: 15px;
+	border-radius: 2px;
+	padding: 5px;
 	text-align: center;
-	margin: 10px;
-	font-size: 20px;
+	margin: 15px;
+	font-size: 1.2rem;
 	display: block;
 }
