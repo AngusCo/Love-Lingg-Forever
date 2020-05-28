@@ -30,7 +30,7 @@ var	tracks = [{
 		"file": "05.mp3"
 	},{
 		"track": 6,
-		"topic": "腦筋急轉彎",
+		"topic": "腦筋轉轉彎",
 		"name": "你會遵守規定嗎？",
 		"duration": "03:08",
 		"file": "06.mp3"
