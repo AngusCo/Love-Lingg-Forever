@@ -1,130 +1,163 @@
-jQuery(function ($) {
+document.addEventListener('DOMContentLoaded', function(e) {
 
-	var supportsAudio = !!document.createElement('audio').canPlayType;
+    var setting = {
+        index: 0,
+        playing: false,
+    }
 
-	if (supportsAudio) {
+    var playlist = [];
 
-		// 初始化 Plyr
-		var player = new Plyr('#player', {
-			controls: [
-				'restart',
-				'play',
-				'progress',
-				'current-time',
-				'duration'
-			]
-		});
 
-		// 宣告與初始控制
-		var index = 0,
-			playing = false,
-			mediaPath = "./",
-			buildPlaylist = $.each(tracks, function(key, value) {
-				var trackNumber = value.track,
-					trackTopic = value.topic,
-					trackName = value.name,
-					trackDuration = value.duration;
-				if (trackNumber.toString().length === 1) {
-					trackNumber = '0' + trackNumber;
-				}
-				$('#plList').append('<li> \
-					<div class="plItem"> \
-						<span class="plTopic">' + trackTopic + ' </span> \
-					</div> \
-					<div class="plItem"> \
-						<span class="plNum">' + trackNumber + '.</span> \
-						<span class="plTitle">' + trackName + '</span> \
-						<span class="plLength">' + trackDuration + '</span> \
-					</div> \
-				</li>');
-			}),
-			trackCount = tracks.length,
+    function checkAudioSupport() {
+        var supportsAudio = !!document.createElement('audio').canPlayType;
 
-			// 顯示文字
-			npAction = $('#npAction'),
-			npTitle = $('#npTitle'),
+        if (supportsAudio) {
+            // 初始化 Plyr
+            var player = new Plyr('#player', {
+                controls: [
+                    'restart',
+                    'play',
+                    'progress',
+                    'current-time',
+                    'duration'
+                ]
+            });
+            console.log('播放器初始化完成');
+            playlistInit();
+        }
+        else {
+            // no audio support
+            $('.column').addClass('hidden');
+            var noSupport = $('#player').text();
+            $('.container').append('<p class="no-support">' + noSupport + '</p>');
+            console.log('不支援音樂播放');
+        }
+    }
 
-			// 音樂播放器控制
-			audio = $('#player').on('play', function () {
-				playing = true;
-				npAction.text('Now Playing...');
-			}).on('pause', function () {
-				playing = false;
-				npAction.text('Paused...');
-			}).on('ended', function () {
-				npAction.text('Paused...');
+    function playlistInit() {
+        fileInfo.forEach(function(info) {
+            playlist.push(
+                {
+                    album: info.album,
+                    topic: info.title.split(' ')[0],
+                    title: info.title.substring(info.title.split(' ')[0].length),
+                    track: info.track,
+                    duration: info.duration,
+                    file: info.file
+                }
+            );
+        }, this);
 
-				index++;
-				if (index == trackCount) {
-					index = 0;
-					audio.pause();
-					loadTrack(index);
-				} else {
-					playTrack(index);
-				}
-			}).get(0),
+        // 處理第一首 title, topic
+        playlist[0].title = playlist[0].topic.split('號')[1];
+        playlist[0].topic = playlist[0].topic.split('號')[0] + '號';
+        
+        // 處理最後一首 title, topic
+        var last = playlist.length - 1;
+        playlist[last].title = playlist[last].topic.split('號')[1];
+        playlist[last].topic = playlist[last].topic.split('號')[0] + '號';
 
-			// 前一首
-			btnPrev = $('#btnPrev').on('click', function () {
-				index--;
+        createPlaylist();
+    }
 
-				if (index < 0) {
-					index = 13;
-				}
+    function createPlaylist() {
+        playlist.forEach(function(trackInfo) {
+            // 產生網頁元素
+            $('#plList').append('<li> \
+                <div class="plItem"> \
+                    <span class="plTopic">' + trackInfo.topic + ' </span> \
+                </div> \
+                <div class="plItem"> \
+                    <span class="plNum">' + trackInfo.track + '.</span> \
+                    <span class="plTitle">' + trackInfo.title + '</span> \
+                    <span class="plLength">' + trackInfo.duration + '</span> \
+                </div> \
+            </li>');
+        });
 
-				if (playing) {
-					playTrack(index);
-				} else {
-					loadTrack(index);
-				}
-			}),
+        startPlayer();
+    }
 
-			// 下一首
-			btnNext = $('#btnNext').on('click', function () {
-				index++;
+    function startPlayer() {
+        // 顯示文字
+        var npAction = $('#npAction');
+        var npTitle = $('#npTitle');
 
-				if (index == trackCount) {
-					index = 0;
-				}
+        // 音樂播放器控制
+        var audio = $('#player').on('play', function() {
+            setting.playing = true;
+            npAction.text('Now Playing...');
+        }).on('pause', function () {
+            setting.playing = false;
+            npAction.text('Paused...');
+        }).on('ended', function () {
+            npAction.text('Paused...');
 
-				if (playing) {
-					playTrack(index);
-				} else {
-					loadTrack(index);
-				}
-			}),
+            setting.index++;
+            if (setting.index == playlist.length) {
+                setting.index = 0;
+                audio.pause();
+                loadTrack(setting.index);
+            } else {
+                playTrack(setting.index);
+            }
+        }).get(0);
 
-			// 點擊曲目選單
-			li = $('#plList li').on('click', function () {
-				var id = parseInt($(this).index());
-				
-				if (id != index) {
-					playTrack(id);
-				} else if (!playing) {
-					audio.play();
-				}
-			}),
+        // 前一首
+        $('#btnPrev').on('click', function () {
+            setting.index--;
 
-			// 讀取音樂
-			loadTrack = function (id) {
-				npTitle.text(tracks[id].track + '. ' + tracks[id].name);
-				document.title = tracks[id].name;
-				index = id;
-				audio.src = mediaPath + tracks[id].file;
-			},
+            if (setting.index < 0) {
+                setting.index = playlist.length - 1;
+            }
 
-			// 播放音樂
-			playTrack = function (id) {
-				loadTrack(id);
-				audio.play();
-			};
+            if (setting.playing) {
+                playTrack(setting.index);
+            } else {
+                loadTrack(setting.index);
+            }
+        }),
 
-		// 預載第一首歌
-		loadTrack(index);
-	} else {
-		// no audio support
-		$('.column').addClass('hidden');
-		var noSupport = $('#player').text();
-		$('.container').append('<p class="no-support">' + noSupport + '</p>');
-	}
+        // 下一首
+        $('#btnNext').on('click', function () {
+            setting.index++;
+
+            if (setting.index == playlist.length) {
+                setting.index = 0;
+            }
+
+            if (setting.playing) {
+                playTrack(setting.index);
+            } else {
+                loadTrack(setting.index);
+            }
+        }),
+
+        // 點擊曲目選單
+        $('#plList li').on('click', function () {
+            var id = parseInt($(this).index());
+            
+            if (id != setting.index) {
+                setting.index = id;
+                playTrack(setting.index);
+            } else if (!setting.playing) {
+                audio.play();
+            }
+        });
+
+        var loadTrack = function(id) {
+            npTitle.text(playlist[id].track + '. ' + playlist[id].title);
+            document.title = playlist[id].title;
+            audio.src = './' + playlist[id].file;
+        }
+
+        var playTrack = function(id) {
+            loadTrack(id);
+            audio.play();
+        }
+
+        loadTrack(setting.index);
+    }
+
+    checkAudioSupport();
 });
